@@ -91,10 +91,10 @@ export namespace Transaction {
     public prevTxId: Buffer | string;
     public outputIndex: number;
     public inputIndex: number;
-    public signature: crypto.Signature | Buffer | string;
+    public signature: CryptoSignature | Buffer | string;
     public sigtype: number;
     public toDER(): Buffer;
-    constructor(data: SignatureData) {}
+    constructor(data: SignatureData)
 
   }
 
@@ -310,12 +310,14 @@ export namespace encoding {
   }
 
   class BufferReader {
+    constructor(buf: Buffer)
     readonly finished: boolean;
+    readonly pos: number;
     set(obj: any): this;
     eof(): boolean;
     read(len: number): Buffer;
     readAll(): Buffer;
-    readUInt8(): Buffer;
+    readUInt8(): number;
     readUInt16BE(): number;
     readUInt16LE(): number;
     readUInt32BE(): number;
@@ -431,6 +433,9 @@ interface CryptoSignature {
 
 export namespace crypto {
   const Signature: CryptoSignature;
+  const Hash: {
+    sha256: (buf: Buffer) => any;
+  };
 }
 
 export namespace util {
