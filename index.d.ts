@@ -70,17 +70,17 @@ export namespace Transaction {
     readonly sequenceNumber: number;
     readonly script: Script;
     readonly output: Output;
-    setScript(script: Sctipt): this;
+    setScript(script: Script): this;
   }
 
   export class Output {
-    constructor(arg: {satoshis: number, script: Sctipt | string, tokenId: string });
+    constructor(arg: {satoshis: number, script: Script | string, tokenId: string });
     readonly script: Script;
     invalidSatoshis(): string | false;
     toObject(): object;
     fromObject: Output;
     setScriptFromBuffer(buffer): void;
-    setScript(script: Sctipt): this;
+    setScript(script: Script): this;
     inspect(): any;
     fromBufferReader(br: encoding.BufferReader, version: number): Output;
     toBufferWriter(writer: encoding.BufferWriter, version: number): encoding.BufferWriter;
