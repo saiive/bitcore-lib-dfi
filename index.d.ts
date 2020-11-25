@@ -79,7 +79,7 @@ export namespace Transaction {
     invalidSatoshis(): string | false;
     toObject(): object;
     fromObject: Output;
-    setScriptFromBuffer(buffer): void;
+    setScriptFromBuffer(buffer: Buffer): void;
     setScript(script: Script): this;
     inspect(): any;
     fromBufferReader(br: encoding.BufferReader, version: number): Output;
@@ -105,7 +105,7 @@ export namespace Transaction {
 
 export class Transaction {
   inputs: Transaction.Input[];
-  addOutput(output: Transaction.Output);
+  addOutput(output: Transaction.Output): this;
   from(utxo: Array<Transaction> | { script: Buffer | string | Script},
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
