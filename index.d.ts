@@ -127,12 +127,17 @@ export namespace Networks {
   function get(args: string | number | Network, keys: string | string[]): Network;
 }
 
+export namespace Address {
+  function isValid(data: any, network: string, type?: any): boolean;
+}
+
 export class Address {
   readonly hashBuffer: Buffer;
   readonly network: Networks.Network;
   readonly type: string;
 
   constructor(data: Buffer | Uint8Array | string | object, network?: Networks.Network, type?: string);
+
 }
 
 export namespace Opcode {
