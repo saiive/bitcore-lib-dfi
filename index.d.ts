@@ -104,6 +104,7 @@ export namespace Transaction {
 }
 
 export class Transaction {
+  constructor(serialized: Transaction | Buffer | object | string);
   inputs: Transaction.Input[];
   addOutput(output: Transaction.Output): this;
   from(utxo: Array<Transaction> | { script: Buffer | string | Script},
