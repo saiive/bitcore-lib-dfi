@@ -111,6 +111,7 @@ export class Transaction {
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
+  toObject(): Object;
 }
 
 export namespace Networks {
