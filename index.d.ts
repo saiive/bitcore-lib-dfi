@@ -74,7 +74,7 @@ export namespace Transaction {
   }
 
   export class Output {
-    constructor(arg: {satoshis: number, script: Script | string, tokenId: string });
+    constructor(arg: {satoshis: number, script: Script | string, tokenId: number });
     readonly script: Script;
     invalidSatoshis(): string | false;
     toObject(): object;
