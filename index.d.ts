@@ -91,7 +91,7 @@ export namespace Transaction {
     public prevTxId: Buffer | string;
     public outputIndex: number;
     public inputIndex: number;
-    public signature: CryptoSignature | Buffer | string;
+    public signature: CryptoSignature;
     public sigtype: number;
     public toDER(): Buffer;
     constructor(data: SignatureData)
@@ -436,6 +436,7 @@ interface CryptoSignature {
   SIGHASH_NONE: 0x02,
   SIGHASH_SINGLE: 0x03,
   SIGHASH_ANYONECANPAY: 0x80,
+  toDER: () => Buffer,
 }
 
 export namespace crypto {
