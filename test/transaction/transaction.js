@@ -1814,18 +1814,17 @@ describe('Transaction', function() {
       });
 
       it('should return parse AccountToUtxos', function () {
-        var tx = new Transaction('04000000010368b25f5c8d2abef2f90c9a04845efa2829a0f5f17916667ec9f7a4fea2a0ab000000006a473044022073014bcb073178d281a370810dc22ebd56a36745b03b3d5e1045db8a34541d320220764e31df0c498b8d439e44b48c3921f6e0a14b779d4f8f2bb1cf6aa1cb0b1d02012103e453a021b67add633ff08b32de5011e51112a666cff7cf9e18b48eca33fb5d01ffffffff0300000000000000002f6a2d44665478621976a91442bd81138ef74d1f63bc42be319dc6a79c8a35bb88ac010000000000e8764817000000020018cef5050000000017a914f844de65447a18e05384425a68b56813c20d99cf870000e87648170000001976a91442bd81138ef74d1f63bc42be319dc6a79c8a35bb88ac0000000000');
-        var balances = new Map();
-        balances.set(0, 100000000000);
+        var tx = new Transaction();
+        tx.outputs.push({_scriptBuffer: new Buffer([106, 45, 68, 102, 84, 120, 98, 25, 118, 169, 20, 66, 189, 129, 19, 142, 247, 77, 31, 99, 188, 66, 190, 49, 157, 198, 167, 156, 138, 53, 187, 136, 172, 1, 0, 0, 0, 0, 0, 232, 118, 72, 23, 0, 0, 0, 2])})
         var customTx = tx.getCustom();
-        customTx.data.balances = new Map().set(0, customTx.data.balances.get(0).toNumber());
         expect(customTx).to.deep.equal({
           txType: 'b',
           data: {
-            from: [118, 169, 20, 66, 189, 129, 19, 142, 247, 77, 31, 99, 188,
-              66, 190, 49, 157, 198, 167, 156, 138, 53, 187, 136, 172],
-            mintingOutputsStart: Buffer.from([2]),
-            balances: balances,
+            from: '76a91442bd81138ef74d1f63bc42be319dc6a79c8a35bb88ac',
+            balances: {
+              0: 0,
+            },
+            mintingOutputsStart: 390625000,
           },
         });
       });
