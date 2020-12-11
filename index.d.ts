@@ -74,7 +74,7 @@ export namespace Transaction {
   }
 
   export class Output {
-    constructor(arg: {satoshis: number, script: Script | string, tokenId: string });
+    constructor(arg: {satoshis: number, script: Script | string, tokenId: number });
     readonly script: Script;
     invalidSatoshis(): string | false;
     toObject(): object;
@@ -91,7 +91,7 @@ export namespace Transaction {
     public prevTxId: Buffer | string;
     public outputIndex: number;
     public inputIndex: number;
-    public signature: CryptoSignature | Buffer | string;
+    public signature: CryptoSignature;
     public sigtype: number;
     public toDER(): Buffer;
     constructor(data: SignatureData)
@@ -104,12 +104,14 @@ export namespace Transaction {
 }
 
 export class Transaction {
+  constructor(serialized?: Transaction | Buffer | object | string);
   inputs: Transaction.Input[];
   addOutput(output: Transaction.Output): this;
   from(utxo: Array<Transaction> | { script: Buffer | string | Script},
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
+  toObject(): Object;
 }
 
 export namespace Networks {
@@ -434,6 +436,7 @@ interface CryptoSignature {
   SIGHASH_NONE: 0x02,
   SIGHASH_SINGLE: 0x03,
   SIGHASH_ANYONECANPAY: 0x80,
+  toDER: () => Buffer,
 }
 
 export namespace crypto {
