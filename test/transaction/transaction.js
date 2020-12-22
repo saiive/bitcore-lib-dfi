@@ -1842,6 +1842,19 @@ describe('Transaction', function() {
         });
       });
 
+      it('should return parse RemovePoolLiquidity', function () {
+        var tx = new Transaction('040000000168250d0266dd1bdc77ad8000c13268e1bee57b7e6c754707d0d0238dad88ed04010000006a47304402207176727b48d7636f675f89da76dbd38f227664280e5495325322bddb3af7b6b90220618f22d2afae4c7e79efdc8d5f83eeed76523541cd3dc1018ecc50d5d626e48c012103aab53b4168b5848fdd3d8ecabafa9a11dd916e880a8bf4ba835159cfa1fbfe54ffffffff0200000000000000002a6a2844665478721976a914167547f9b4b17ad964aaa44b94c0763e99bfe9ec88ac05baf7050000000000002bfe0e000000000017a91421335623737fdbb421585b9084ed7bbd8d0f4e1f870000000000');
+        var customTx = tx.getCustom();
+        expect(customTx).to.deep.equal({
+          txType: 'r',
+          data: {
+            from: 'pkJBSxEtBBEeSUS9vSE6J2PL49RieebK63',
+            nTokenId: '100121093',
+            nValue: 0,
+          },
+        });
+      });
+
     });
   });
 });
