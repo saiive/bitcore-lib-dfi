@@ -1820,14 +1820,41 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'b',
           data: {
-            from: '76a91442bd81138ef74d1f63bc42be319dc6a79c8a35bb88ac',
-            balances: {
-              0: 0,
-            },
-            mintingOutputsStart: 390625000,
+            from: 'pkJBeyKe2UtznbbbPcdMqL39aosMZm5CpT',
+            balances: [{ balance: 1000, token: 0}],
+            mintingOutputsStart: 2,
           },
         });
       });
+
+      it('should return parse AccountToAccount', function () {
+        var tx = new Transaction('040000000001019950f49786fec42358145b0822a5536f16812fad63581989dff874e19224402a00000000171600148ac0c55f372bda439e66fb32795f29fc2f689121ffffffff020000000000000000456a43446654784217a914990b4f2d928f6dfb98c812b485c54dc73434ac24870117a91473e102cb1128325fa42378a5df0b73e51004536d87010200000020bc2700000000000046de05000000000017a9146f10cf4c37acf81b691a76c84a44ad1dfd979f05870002473044022067118eea6f18c14ca6fe92ebc5541510a9d6fb0f47b4b5daca1f79309801adb80220468705d631d0e37e3ea359af1564437be0b8539cbaa90903d22a7911ed42ae19012102b370dda3e600b1fd7c05dd23c755c97e10944d83246899813d2b9a81c3600d0f00000000');
+        var customTx = tx.getCustom();
+        expect(customTx).to.deep.equal({
+          txType: 'B',
+          data: {
+            from: '4VYv9YpGrjtp7yX1soZPwnaS6TDgDFHY',
+            to: {
+              '4VYsrzuWWkV29niVnmKync7LcEk2gHxA': [{ balance: 0.02604064, token: 2}]
+
+            }
+          },
+        });
+      });
+
+      it('should return parse RemovePoolLiquidity', function () {
+        var tx = new Transaction('040000000168250d0266dd1bdc77ad8000c13268e1bee57b7e6c754707d0d0238dad88ed04010000006a47304402207176727b48d7636f675f89da76dbd38f227664280e5495325322bddb3af7b6b90220618f22d2afae4c7e79efdc8d5f83eeed76523541cd3dc1018ecc50d5d626e48c012103aab53b4168b5848fdd3d8ecabafa9a11dd916e880a8bf4ba835159cfa1fbfe54ffffffff0200000000000000002a6a2844665478721976a914167547f9b4b17ad964aaa44b94c0763e99bfe9ec88ac05baf7050000000000002bfe0e000000000017a91421335623737fdbb421585b9084ed7bbd8d0f4e1f870000000000');
+        var customTx = tx.getCustom();
+        expect(customTx).to.deep.equal({
+          txType: 'r',
+          data: {
+            from: 'pkJBSxEtBBEeSUS9vSE6J2PL49RieebK63',
+            nTokenId: '100121093',
+            nValue: 0,
+          },
+        });
+      });
+
     });
   });
 });
