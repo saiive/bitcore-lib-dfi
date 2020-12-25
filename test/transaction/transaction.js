@@ -1779,17 +1779,17 @@ describe('Transaction', function() {
       it('should exist', function() {
         var tx = new Transaction();
 
-        expect(tx.isCustom).to.exist;
+        expect(tx.checkCustom().isCustom).to.exist;
       });
 
       it('should return false', function() {
         var tx = new Transaction('040000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff0402761100ffffffff0300a7a924030000001976a914caa99cd8cea524fa00bf8fce5b4a77696bb4b01088ac0080fd9c76000000001976a914e5ed1bfa532e2358e964381a70e0df6d4dd0041988ac000000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9000120000000000000000000000000000000000000000000000000000000000000000000000000');
-        expect(tx.isCustom()).to.be.false;
+        expect(tx.checkCustom().isCustom).to.be.false;
       });
 
       it('should return true', function () {
         var tx = new Transaction('040000000001015b72db772261b095944ebfac13328b1fe8d70e7764a9f12f27cd2d80439d96090200000017160014285a15838a253432282062f02e88d1f39f41500dfeffffff0300e40b54020000001b6a1944665478540841686d6564546f6b00080000000000000000030000e1f5050000000017a9145630ddb88cfdd2ef4b780dfd538ad67292601d668700d4a92026eb86230017a9147a1d7e4582a304402d68325f2983db2ea851c87f87000247304402201109e50cc7895db021f5adf399ae5db4107bf7fffb99fceeb2d8f5fc398614140220443a4189445b2c98ec0f2cd610d3d318109bbb3bd30422e79213c08d76c36983012103a425648cb8758539fc480f30b5a32b82d5c89100eed4487a363f26798b46489400000000');
-        expect(tx.isCustom()).to.be.true;
+        expect(tx.checkCustom().isCustom).to.be.true;
       });
     });
 
@@ -1861,8 +1861,14 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'a',
           data: {
-            from: 'pkJBSxEtBBEeSUS9vSE6J2PL49RieebK63',
-            to: '',
+            from: [
+              {'4VYnXSTpQjXSx1sbeyaPaTgWrdqaF2Rt': [{balance: 0.36497477, token: 3}]},
+              {'pkJBM1pyyocj7hTV4wDuEvYJCzrNWXi2ZZ': [{balance: 0.35795713, token: 3}]},
+              {'pkJBQMPV919jfowqavnhEkW4R61cotiw9m': [{balance: 498.30023157, token: 3}]},
+            ],
+            to: [{
+              '4VYyA6aS6jaFKktUvfoCpV4F1peM5Z2E': [{balance: 499.02316347, token: 3}],
+            }],
           },
         });
       });
