@@ -360,6 +360,7 @@ export namespace CustomTx {
     accountToUtxos: 'b',
     accountToAccount: 'B',
     setGovVariable: 'G',
+    anyAccountsToAccounts: 'a',
   };
 
   class CreateMasternode {
@@ -421,6 +422,10 @@ export namespace CustomTx {
   }
 
   class AccountToAccount {
+    constructor(data: ArgCustomTx);
+  }
+
+  class AnyAccountsToAccounts {
     constructor(data: ArgCustomTx);
   }
 }
