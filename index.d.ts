@@ -1,3 +1,5 @@
+import Output = Transaction.Output;
+
 export namespace Script {
   import Signature = Transaction.Signature;
   function buildPublicKeyHashIn (publicKey: any, signature: Signature | Buffer, sigtype: number): Script;
@@ -51,7 +53,9 @@ export class Script {
   checkMinimalPush(i: number): boolean;
   getSignatureOperationsCount(accurate: boolean): number;
 
-  toAddress(): Address;
+  toAddress(network?: string): Address;
+
+  chunks: Buffer[];
 }
 
 export interface SignatureData {
@@ -63,6 +67,8 @@ export interface SignatureData {
   sigtype: number,
 }
 
+export type TransactionCustomType =  'C' | 'R' | 'T' | 'M' | 'N' | 'n' | 'p' | 'u' | 's' | 'l' | 'r' | 'U' | 'b' | 'B' | 'G' | 'a';
+
 export namespace Transaction {
   class Input {
     readonly prevTxId: Buffer | string;
@@ -71,6 +77,7 @@ export namespace Transaction {
     readonly script: Script;
     readonly output: Output;
     setScript(script: Script): this;
+    toObject(): object;
   }
 
   export class Output {
@@ -79,6 +86,7 @@ export namespace Transaction {
     invalidSatoshis(): string | false;
     toObject(): object;
     fromObject: Output;
+    satoshis: number;
     setScriptFromBuffer(buffer: Buffer): void;
     setScript(script: Script): this;
     inspect(): any;
@@ -112,6 +120,22 @@ export class Transaction {
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
   toObject(): Object;
+  outputAmount: number;
+  hash: string;
+  _hash: undefined | string;
+  isCoinbase: () => boolean;
+  isAnchor: () => boolean;
+  outputs: Output[];
+  toBuffer: () => Buffer;
+  getAnchor: () => { btcTxHash: string,
+    anchorBlockHeight: number,
+    prevAnchorBlockHeight: number, } | null;
+  checkCustom: () => { isCustom: boolean, br?: encoding.BufferReader  };
+  getCustom: () => {
+    txType: TransactionCustomType,
+    data: any,
+  } | null;
+  nLockTime: number;
 }
 
 export namespace Networks {
@@ -139,7 +163,7 @@ export class Address {
   readonly type: string;
 
   constructor(data: Buffer | Uint8Array | string | object, network?: Networks.Network, type?: string);
-
+  toString(b?: boolean): any
 }
 
 export namespace Opcode {
@@ -360,6 +384,7 @@ export namespace CustomTx {
     accountToUtxos: 'b',
     accountToAccount: 'B',
     setGovVariable: 'G',
+    anyAccountsToAccounts: 'a',
   };
 
   class CreateMasternode {
@@ -421,6 +446,10 @@ export namespace CustomTx {
   }
 
   class AccountToAccount {
+    constructor(data: ArgCustomTx);
+  }
+
+  class AnyAccountsToAccounts {
     constructor(data: ArgCustomTx);
   }
 }
