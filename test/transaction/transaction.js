@@ -1820,7 +1820,7 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'b',
           data: {
-            from: 'pkJBeyKe2UtznbbbPcdMqL39aosMZm5CpT',
+            from: '8MAkLbhsQYrjX8zZGGKANop1Vc4c6bhNFN',
             balances: [{ balance: 1000, token: 0}],
             mintingOutputsStart: 2,
           },
@@ -1833,9 +1833,9 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'B',
           data: {
-            from: '4VYv9YpGrjtp7yX1soZPwnaS6TDgDFHY',
+            from: 'dTNWYuZ9NwdMimUEb7ifV3MHVdQU6vaqjm',
             to: {
-              '4VYsrzuWWkV29niVnmKync7LcEk2gHxA': [{ balance: 0.02604064, token: 2}]
+              'dPyzssCiAr9UndJj2VmzqBdTdB4Hhz2BSP': [{ balance: 0.02604064, token: 2}]
 
             }
           },
@@ -1848,7 +1848,7 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'r',
           data: {
-            from: 'pkJBSxEtBBEeSUS9vSE6J2PL49RieebK63',
+            from: '8H8c61iJib65MjSnVfALdCRtencPTe6KhT',
             nTokenId: '100121093',
             nValue: 0,
           },
@@ -1862,12 +1862,12 @@ describe('Transaction', function() {
           txType: 'a',
           data: {
             from: [
-              {'4VYnXSTpQjXSx1sbeyaPaTgWrdqaF2Rt': [{balance: 0.36497477, token: 3}]},
-              {'pkJBM1pyyocj7hTV4wDuEvYJCzrNWXi2ZZ': [{balance: 0.35795713, token: 3}]},
-              {'pkJBQMPV919jfowqavnhEkW4R61cotiw9m': [{balance: 498.30023157, token: 3}]},
+              {'dG54c6VCvyXwBCR85XVn5NjstW6mh2jxyR': [{balance: 0.36497477, token: 3}]},
+              {'8F8vQ8SLJGfxNkP4qwpgxKpUygXbsDL9ZU': [{balance: 0.35795713, token: 3}]},
+              {'8GFwG2HYPdKYai9zJsi9PRGxfUUt8oXQta': [{balance: 498.30023157, token: 3}]},
             ],
             to: [{
-              '4VYyA6aS6jaFKktUvfoCpV4F1peM5Z2E': [{balance: 499.02316347, token: 3}],
+              'dXqHV2SsSU4ALknatqqAKj6EsjvahSGCmR': [{balance: 499.02316347, token: 3}],
             }],
           },
         });
