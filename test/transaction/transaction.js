@@ -1892,6 +1892,25 @@ describe('Transaction', function() {
         });
       });
 
+      it('should return parse updateTokenAny', function () {
+        var tx = new Transaction('04000000000101181f5992421ed3ca8c53169f097275c33b71854b23e662c88559128f19f75a870100000017160014e61a2fac28d05e8b46018af4ab544db78fc1b2cbffffffff0200000000000000003b6a39446654786e3d594ec7e01423f4c43482f2df3104b47298b706addd3dc4cd98a91eca49590804425553480442757368080000000000000000070010d1f5050000000017a91496f45ecb0414ba9aa46aa1ea01bd2cbb40ab74318700024730440220095456c6446f7fadf473f803e459fb860b15f3351c0db30d3f495a650b2f7d79022014c8bf1da663067d0fc5f5cd9af259b00fbb2ff48d9c2eaa927682a0d7877acf0121032c5e55ccf9b869c5c7db68c97ef57912b23d784ea0ecdfce14f87f759f0c787500000000');
+        var customTx = tx.getCustom();
+        console.log('sdfsdf', customTx);
+        expect(customTx).to.deep.equal({
+          txType: 'n',
+          data: {
+            tokenTx: '3d594ec7e01423f4c43482f2df3104b47298b706addd3dc4cd98a91eca495908',
+            newToken: {
+              symbol: 'BUSH',
+              name: 'Bush',
+              decimal: 8,
+              limit: 0,
+              flags: 7,
+            }
+          },
+        });
+      });
+
     });
   });
 });
