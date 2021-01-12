@@ -1873,6 +1873,26 @@ describe('Transaction', function() {
         });
       });
 
+      it('should return parse PoolSwap', function () {
+        var tx = new Transaction('0400000001c3f0a4ca5559b855d3fd7fd780eafb8afebf31c139227cf971cf6298236020b9000000006a473044022026ca20585b7327b544196f627d4a4b4f3eb534e86974779a750de453a2ef101002207ed6540d8f144106bdf4913aac3ec04ee55df3d704f83450063f1239c15e2ff0012102b5bae0dd041d795c455d1ecd546af7365c7c0b0785b97d0017f24113205e319affffffff020000000000000000566a4c5344665478731976a91420fe95b38f54aa57678a42ff7791b33162d79e4d88ac0000e9a435000000001976a914fe3cf72c6e405e5f681cfc53a3ee17977ce11f6c88ac020000000000000000e3090000000000000000c20e000000000017a914d427adedfffe4ee9c83a1c94ff63b7cf65c219bc870000000000');
+        var customTx = tx.getCustom();
+        expect(customTx).to.deep.equal({
+          txType: 's',
+          data: {
+            from: '8J6KKxHQAWDJDR1PQfC46ocgmxTvtLLc6R',
+            idTokenFrom: 0,
+            amountFrom: 9,
+            to: '8eG9Pe1wQnWZuXD5NRr3QaxDex9RJ99fd5'
+            idTokenTo: 2,
+            maxPrice: {
+              integer: 0,
+              fraction: 0.00002531,
+            }
+            mintingOutputsStart: 2,
+          },
+        });
+      });
+
     });
   });
 });
