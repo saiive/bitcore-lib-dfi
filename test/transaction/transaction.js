@@ -1882,13 +1882,12 @@ describe('Transaction', function() {
             from: '8J6KKxHQAWDJDR1PQfC46ocgmxTvtLLc6R',
             idTokenFrom: 0,
             amountFrom: 9,
-            to: '8eG9Pe1wQnWZuXD5NRr3QaxDex9RJ99fd5'
+            to: '8eG9Pe1wQnWZuXD5NRr3QaxDex9RJ99fd5',
             idTokenTo: 2,
             maxPrice: {
               integer: 0,
               fraction: 0.00002531,
-            }
-            mintingOutputsStart: 2,
+            },
           },
         });
       });
