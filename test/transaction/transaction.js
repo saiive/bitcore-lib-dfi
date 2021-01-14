@@ -1820,7 +1820,7 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'b',
           data: {
-            from: 'pkJBeyKe2UtznbbbPcdMqL39aosMZm5CpT',
+            from: '8MAkLbhsQYrjX8zZGGKANop1Vc4c6bhNFN',
             balances: [{ balance: 1000, token: 0}],
             mintingOutputsStart: 2,
           },
@@ -1833,9 +1833,9 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'B',
           data: {
-            from: '4VYv9YpGrjtp7yX1soZPwnaS6TDgDFHY',
+            from: 'dTNWYuZ9NwdMimUEb7ifV3MHVdQU6vaqjm',
             to: {
-              '4VYsrzuWWkV29niVnmKync7LcEk2gHxA': [{ balance: 0.02604064, token: 2}]
+              'dPyzssCiAr9UndJj2VmzqBdTdB4Hhz2BSP': [{ balance: 0.02604064, token: 2}]
 
             }
           },
@@ -1848,7 +1848,7 @@ describe('Transaction', function() {
         expect(customTx).to.deep.equal({
           txType: 'r',
           data: {
-            from: 'pkJBSxEtBBEeSUS9vSE6J2PL49RieebK63',
+            from: '8H8c61iJib65MjSnVfALdCRtencPTe6KhT',
             nTokenId: '100121093',
             nValue: 0,
           },
@@ -1862,13 +1862,51 @@ describe('Transaction', function() {
           txType: 'a',
           data: {
             from: [
-              {'4VYnXSTpQjXSx1sbeyaPaTgWrdqaF2Rt': [{balance: 0.36497477, token: 3}]},
-              {'pkJBM1pyyocj7hTV4wDuEvYJCzrNWXi2ZZ': [{balance: 0.35795713, token: 3}]},
-              {'pkJBQMPV919jfowqavnhEkW4R61cotiw9m': [{balance: 498.30023157, token: 3}]},
+              {'dG54c6VCvyXwBCR85XVn5NjstW6mh2jxyR': [{balance: 0.36497477, token: 3}]},
+              {'8F8vQ8SLJGfxNkP4qwpgxKpUygXbsDL9ZU': [{balance: 0.35795713, token: 3}]},
+              {'8GFwG2HYPdKYai9zJsi9PRGxfUUt8oXQta': [{balance: 498.30023157, token: 3}]},
             ],
             to: [{
-              '4VYyA6aS6jaFKktUvfoCpV4F1peM5Z2E': [{balance: 499.02316347, token: 3}],
+              'dXqHV2SsSU4ALknatqqAKj6EsjvahSGCmR': [{balance: 499.02316347, token: 3}],
             }],
+          },
+        });
+      });
+
+      it('should return parse PoolSwap', function () {
+        var tx = new Transaction('0400000001c3f0a4ca5559b855d3fd7fd780eafb8afebf31c139227cf971cf6298236020b9000000006a473044022026ca20585b7327b544196f627d4a4b4f3eb534e86974779a750de453a2ef101002207ed6540d8f144106bdf4913aac3ec04ee55df3d704f83450063f1239c15e2ff0012102b5bae0dd041d795c455d1ecd546af7365c7c0b0785b97d0017f24113205e319affffffff020000000000000000566a4c5344665478731976a91420fe95b38f54aa57678a42ff7791b33162d79e4d88ac0000e9a435000000001976a914fe3cf72c6e405e5f681cfc53a3ee17977ce11f6c88ac020000000000000000e3090000000000000000c20e000000000017a914d427adedfffe4ee9c83a1c94ff63b7cf65c219bc870000000000');
+        var customTx = tx.getCustom();
+        expect(customTx).to.deep.equal({
+          txType: 's',
+          data: {
+            from: '8J6KKxHQAWDJDR1PQfC46ocgmxTvtLLc6R',
+            idTokenFrom: 0,
+            amountFrom: 9,
+            to: '8eG9Pe1wQnWZuXD5NRr3QaxDex9RJ99fd5',
+            idTokenTo: 2,
+            maxPrice: {
+              integer: 0,
+              fraction: 0.00002531,
+            },
+          },
+        });
+      });
+
+      it('should return parse updateTokenAny', function () {
+        var tx = new Transaction('04000000000101181f5992421ed3ca8c53169f097275c33b71854b23e662c88559128f19f75a870100000017160014e61a2fac28d05e8b46018af4ab544db78fc1b2cbffffffff0200000000000000003b6a39446654786e3d594ec7e01423f4c43482f2df3104b47298b706addd3dc4cd98a91eca49590804425553480442757368080000000000000000070010d1f5050000000017a91496f45ecb0414ba9aa46aa1ea01bd2cbb40ab74318700024730440220095456c6446f7fadf473f803e459fb860b15f3351c0db30d3f495a650b2f7d79022014c8bf1da663067d0fc5f5cd9af259b00fbb2ff48d9c2eaa927682a0d7877acf0121032c5e55ccf9b869c5c7db68c97ef57912b23d784ea0ecdfce14f87f759f0c787500000000');
+        var customTx = tx.getCustom();
+        console.log('sdfsdf', customTx);
+        expect(customTx).to.deep.equal({
+          txType: 'n',
+          data: {
+            tokenTx: '3d594ec7e01423f4c43482f2df3104b47298b706addd3dc4cd98a91eca495908',
+            newToken: {
+              symbol: 'BUSH',
+              name: 'Bush',
+              decimal: 8,
+              limit: 0,
+              flags: 7,
+            }
           },
         });
       });
