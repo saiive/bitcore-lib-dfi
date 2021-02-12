@@ -143,7 +143,7 @@ export class Transaction {
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
-  signLedger(getSignLedger: (Buffer) => Promise<Buffer>, publicKey: PublicKey, sigtype: number, signingMethod?: string): Promise<this>;
+  signWithInterface(signInterface: (Buffer) => Promise<Buffer>, publicKey: PublicKey, sigtype: number, signingMethod?: string): Promise<this>;
   toObject(): Object;
   outputAmount: number;
   hash: string;
