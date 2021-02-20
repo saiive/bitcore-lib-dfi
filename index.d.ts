@@ -145,6 +145,7 @@ export class Transaction {
   fee(amount: number): this;
   signWithInterface(signInterface: (hashbuf: Buffer) => Promise<Buffer>, publicKey: PublicKey, sigtype: number, signingMethod?: string): Promise<this>;
   toObject(): Object;
+  change(address: string | Address | object): this;
   outputAmount: number;
   hash: string;
   _hash: undefined | string;
