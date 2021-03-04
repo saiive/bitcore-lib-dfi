@@ -86,7 +86,7 @@ export namespace Transaction {
   }
 
   export class Output {
-    constructor(arg: {satoshis: number | string, script: Script | string, tokenId: number });
+    constructor(arg: {satoshis: number | string, script: Script | string, tokenId: number | string });
     readonly script: Script;
     invalidSatoshis(): string | false;
     toObject(): object;
@@ -139,7 +139,7 @@ export class Transaction {
   constructor(serialized?: Transaction | Buffer | object | string);
   inputs: Transaction.Input[];
   addOutput(output: Transaction.Output): this;
-  from(utxo: Array<Transaction> | { script: Buffer | string | Script},
+  from(utxo: Array<Transaction | object> | { script: Buffer | string | Script},
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
@@ -394,6 +394,12 @@ export namespace encoding {
 type ArgCustomTx = encoding.BufferReader | Object;
 
 export namespace CustomTx {
+  type CBalancesData = {
+    [key: string]: [{ token: string | number, balance: number }]
+  }
+
+  type CScriptData = string;
+
   const customTxType: {
     createMasternode: 'C',
     resignMasternode: 'R',
@@ -413,71 +419,184 @@ export namespace CustomTx {
     anyAccountsToAccounts: 'a',
   };
 
+  interface CreateMasternodeData {
+    operatorType: string;
+    operatorAuthAddress: string;
+  }
+
   class CreateMasternode {
     constructor(data: ArgCustomTx);
   }
 
+  interface ResignMasternodeData {
+    nodeId: string;
+  }
 
   class ResignMasternode {
     constructor(data: ArgCustomTx);
   }
 
+  interface CreateTokenData {
+    symbol: string;
+    name: string;
+    decimal: number;
+    limit: number;
+    flags: number;
+  }
 
   class CreateToken {
     constructor(data: ArgCustomTx);
+  }
+
+  interface MintTokenData {
+    minted: CBalancesData;
   }
 
   class MintToken {
     constructor(data: ArgCustomTx);
   }
 
+  interface UpdateTokenData {
+    tokenTx: string;
+    isDAT: boolean;
+  }
+
   class UpdateToken {
     constructor(data: ArgCustomTx);
+  }
+
+  interface UpdateTokenAnyData {
+    tokenTx: string;
+    isDAT: boolean;
+    symbol: string;
+    name: string;
+    decimal: number;
+    mintable: number;
+    limit: number;
+    tradeable: number;
   }
 
   class UpdateTokenAny {
     constructor(data: ArgCustomTx);
   }
 
+  interface CreatePoolPairData {
+    idTokenA: number;
+    idTokenB: number;
+    commission: number;
+    ownerAddress: CScriptData;
+    status: boolean;
+  }
+
   class CreatePoolPair {
     constructor(data: ArgCustomTx);
+  }
+
+  interface UpdatePoolPairData {
+    pollId: string;
+    status: boolean;
+    commission: number;
+    ownerAddress: CScriptData;
   }
 
   class UpdatePoolPair {
     constructor(data: ArgCustomTx);
   }
 
+  interface PoolSwapData {
+    from: CScriptData;
+    idTokenFrom: number | string;
+    amountFrom: number;
+    to: CScriptData;
+    idTokenTo: number | string;
+    maxPrice?: number;
+  }
+
   class PoolSwap {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AddPoolLiquidityData {
+    from: {
+      [key: string]: CBalancesData;
+    }
+    shareAddress: CScriptData;
   }
 
   class AddPoolLiquidity {
     constructor(data: ArgCustomTx);
   }
 
+  interface RemovePoolLiquidityData {
+    from: CScriptData;
+    nTokenId: number | string;
+    nValue: number;
+  }
+
   class RemovePoolLiquidity {
     constructor(data: ArgCustomTx);
+  }
+
+  interface SetGovVariableData {
+    name: string;
   }
 
   class SetGovVariable {
     constructor(data: ArgCustomTx);
   }
 
+  interface UtxosToAccountData {
+    to: CBalancesData;
+  }
+
   class UtxosToAccount {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AccountToUtxosData {
+    from: CScriptData;
+    balances: CBalancesData;
+    mintingOutputsStart: number;
   }
 
   class AccountToUtxos {
     constructor(data: ArgCustomTx);
   }
 
+  interface AccountToAccountData {
+    from: CScriptData;
+    to: CBalancesData;
+  }
+
   class AccountToAccount {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AnyAccountsToAccounts {
+    from: Array<{[key: string]: {[key: string]: {token: string, balance: number}}}>;
+    to:  Array<{[key: string]: {[key: string]: {token: string, balance: number}}}>;
   }
 
   class AnyAccountsToAccounts {
     constructor(data: ArgCustomTx);
   }
+
+  type CustomData = CreateMasternodeData |
+    ResignMasternodeData |
+    CreateTokenData |
+    MintTokenData |
+    UpdateTokenData |
+    UpdateTokenAnyData |
+    CreatePoolPairData |
+    UpdatePoolPairData |
+    PoolSwapData |
+    AddPoolLiquidityData |
+    RemovePoolLiquidityData |
+    SetGovVariableData |
+    UtxosToAccountData |
+    AccountToUtxosData |
+    AccountToAccountData |
+    AnyAccountsToAccounts;
 }
 
 export type Sighash = {
