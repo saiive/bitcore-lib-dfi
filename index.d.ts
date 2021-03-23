@@ -3,9 +3,14 @@ import Output = Transaction.Output;
 export namespace Script {
   import Signature = Transaction.Signature;
   function buildPublicKeyHashIn (publicKey: any, signature: Signature | Buffer, sigtype: number): Script;
+  function buildScriptHashOut(address: Address): Script;
+  function buildPublicKeyHashOut(address: Address): Script;
+  function buildP2SHMultisigIn(pubkeys: PublicKey[], threshold: number, signatures: Signature[] | Buffer[], opts?: {noSorting: boolean, cachedMultisig: Script}): Script
+  const Interpreter: any;
 }
 
 export class Script {
+  constructor(from?: Script | Address | Buffer | string | object);
   set(obj: object): this;
 
   toBuffer(): Buffer;
@@ -81,7 +86,7 @@ export namespace Transaction {
   }
 
   export class Output {
-    constructor(arg: {satoshis: number, script: Script | string, tokenId: number });
+    constructor(arg: {satoshis: number | string, script: Script | string, tokenId: number | string });
     readonly script: Script;
     invalidSatoshis(): string | false;
     toObject(): object;
@@ -103,7 +108,26 @@ export namespace Transaction {
     public sigtype: number;
     public toDER(): Buffer;
     constructor(data: SignatureData)
+  }
 
+  namespace Input {
+    class MultiSigScriptHash {
+      constructor(input: Input, pubkeys: PublicKey[], threshold: number, signatures: Signature[], nestedWitness: boolean, opts?: any);
+      toObject(): object;
+      _deserializeSignatures(): Transaction.Signature[];
+      _serializeSignatures(): object;
+      getScriptCode(): Buffer;
+      getSighash(): string;
+      addSignature(): this;
+      _updateScript(): this;
+      _createSignatures(): Buffer[];
+    }
+
+    namespace MultiSigScriptHash {
+      const OPCODES_SIZE = 7;
+      const SIGNATURE_SIZE = 74;
+      const PUBKEY_SIZE = 34;
+    }
   }
 
   const Sighash: Sighash;
@@ -115,11 +139,13 @@ export class Transaction {
   constructor(serialized?: Transaction | Buffer | object | string);
   inputs: Transaction.Input[];
   addOutput(output: Transaction.Output): this;
-  from(utxo: Array<Transaction> | { script: Buffer | string | Script},
+  from(utxo: Array<Transaction | object> | { script: Buffer | string | Script},
        pubkeys?: Array<any>, threshold?: number, nestedWitness?: boolean, opts?: object): this;
   to(address: string | Address | object, amount: number): this;
   fee(amount: number): this;
+  signWithInterface(signInterface: (hashbuf: Buffer) => Promise<Buffer>, publicKey: PublicKey, sigtype: number, signingMethod?: string): Promise<this>;
   toObject(): Object;
+  change(address: string | Address | object): this;
   outputAmount: number;
   hash: string;
   _hash: undefined | string;
@@ -368,6 +394,12 @@ export namespace encoding {
 type ArgCustomTx = encoding.BufferReader | Object;
 
 export namespace CustomTx {
+  type CBalancesData = {
+    [key: string]: [{ token: string | number, balance: number }]
+  }
+
+  type CScriptData = string;
+
   const customTxType: {
     createMasternode: 'C',
     resignMasternode: 'R',
@@ -387,71 +419,184 @@ export namespace CustomTx {
     anyAccountsToAccounts: 'a',
   };
 
+  interface CreateMasternodeData {
+    operatorType: string;
+    operatorAuthAddress: string;
+  }
+
   class CreateMasternode {
     constructor(data: ArgCustomTx);
   }
 
+  interface ResignMasternodeData {
+    nodeId: string;
+  }
 
   class ResignMasternode {
     constructor(data: ArgCustomTx);
   }
 
+  interface CreateTokenData {
+    symbol: string;
+    name: string;
+    decimal: number;
+    limit: number;
+    flags: number;
+  }
 
   class CreateToken {
     constructor(data: ArgCustomTx);
+  }
+
+  interface MintTokenData {
+    minted: CBalancesData;
   }
 
   class MintToken {
     constructor(data: ArgCustomTx);
   }
 
+  interface UpdateTokenData {
+    tokenTx: string;
+    isDAT: boolean;
+  }
+
   class UpdateToken {
     constructor(data: ArgCustomTx);
+  }
+
+  interface UpdateTokenAnyData {
+    tokenTx: string;
+    isDAT: boolean;
+    symbol: string;
+    name: string;
+    decimal: number;
+    mintable: number;
+    limit: number;
+    tradeable: number;
   }
 
   class UpdateTokenAny {
     constructor(data: ArgCustomTx);
   }
 
+  interface CreatePoolPairData {
+    idTokenA: number;
+    idTokenB: number;
+    commission: number;
+    ownerAddress: CScriptData;
+    status: boolean;
+  }
+
   class CreatePoolPair {
     constructor(data: ArgCustomTx);
+  }
+
+  interface UpdatePoolPairData {
+    pollId: string;
+    status: boolean;
+    commission: number;
+    ownerAddress: CScriptData;
   }
 
   class UpdatePoolPair {
     constructor(data: ArgCustomTx);
   }
 
+  interface PoolSwapData {
+    from: CScriptData;
+    idTokenFrom: number | string;
+    amountFrom: number;
+    to: CScriptData;
+    idTokenTo: number | string;
+    maxPrice?: number;
+  }
+
   class PoolSwap {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AddPoolLiquidityData {
+    from: {
+      [key: string]: CBalancesData;
+    }
+    shareAddress: CScriptData;
   }
 
   class AddPoolLiquidity {
     constructor(data: ArgCustomTx);
   }
 
+  interface RemovePoolLiquidityData {
+    from: CScriptData;
+    nTokenId: number | string;
+    nValue: number;
+  }
+
   class RemovePoolLiquidity {
     constructor(data: ArgCustomTx);
+  }
+
+  interface SetGovVariableData {
+    name: string;
   }
 
   class SetGovVariable {
     constructor(data: ArgCustomTx);
   }
 
+  interface UtxosToAccountData {
+    to: CBalancesData;
+  }
+
   class UtxosToAccount {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AccountToUtxosData {
+    from: CScriptData;
+    balances: CBalancesData;
+    mintingOutputsStart: number;
   }
 
   class AccountToUtxos {
     constructor(data: ArgCustomTx);
   }
 
+  interface AccountToAccountData {
+    from: CScriptData;
+    to: CBalancesData;
+  }
+
   class AccountToAccount {
     constructor(data: ArgCustomTx);
+  }
+
+  interface AnyAccountsToAccounts {
+    from: Array<{[key: string]: {[key: string]: {token: string, balance: number}}}>;
+    to:  Array<{[key: string]: {[key: string]: {token: string, balance: number}}}>;
   }
 
   class AnyAccountsToAccounts {
     constructor(data: ArgCustomTx);
   }
+
+  type CustomData = CreateMasternodeData |
+    ResignMasternodeData |
+    CreateTokenData |
+    MintTokenData |
+    UpdateTokenData |
+    UpdateTokenAnyData |
+    CreatePoolPairData |
+    UpdatePoolPairData |
+    PoolSwapData |
+    AddPoolLiquidityData |
+    RemovePoolLiquidityData |
+    SetGovVariableData |
+    UtxosToAccountData |
+    AccountToUtxosData |
+    AccountToAccountData |
+    AnyAccountsToAccounts;
 }
 
 export type Sighash = {
@@ -466,6 +611,7 @@ interface CryptoSignature {
   SIGHASH_SINGLE: 0x03,
   SIGHASH_ANYONECANPAY: 0x80,
   toDER: () => Buffer,
+  fromBuffer: (buf: Buffer) => CryptoSignature
 }
 
 export namespace crypto {
@@ -489,6 +635,28 @@ export namespace util {
     checkArgument: (condition: any, argumentName: string, message: string, docsPath: string) => any;
     checkArgumentType: (argument: any, type: string, argumentName: string) => any;
   }
+}
+
+export class PublicKey {
+  readonly point: any;
+  readonly compressed: boolean;
+  readonly network: string;
+
+  constructor(data: string, extra?: {compressed?: any, network?: string});
+
+  toObject(): {x: string, y: string, compressed: any};
+  toBuffer(): Buffer;
+  _getID(): string;
+  toAddress(network: string): Address;
+  toString(): string;
+}
+
+export namespace PublicKey {
+  function fromBuffer(buf: Buffer, strict: boolean): PublicKey;
+  function fromDER(buf: Buffer, strict: boolean): PublicKey;
+  function fromPoint(point: any, compressed: boolean): string;
+  function fromX(odd: boolean, x: number): Address;
+  function fromString(str: string, encoding?: string): PublicKey;
 }
 
 
